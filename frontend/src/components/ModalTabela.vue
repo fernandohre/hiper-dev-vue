@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog v-model="abrirModal" max-width="500px">
+    <v-dialog v-model="$store.state.statusModal" max-width="500px">
       <v-card>
         <v-card-title>
           <span class="headline">Edição</span>
@@ -12,7 +12,7 @@
               <v-row>
                 <v-text-field
                   :rules="regrasFormulario.descricao"
-                  v-model="produtoEmEdicao.nome"
+                  v-model="$store.state.produtoEmEdicao.nome"
                   label="Descrição"
                   :counter="50"
                   required
@@ -21,7 +21,7 @@
               <v-row>
                 <v-text-field
                   :rules="regrasFormulario.preco"
-                  v-model="produtoEmEdicao.preco"
+                  v-model="$store.state.produtoEmEdicao.preco"
                   label="Preço"
                   prefix="R$"
                   @keypress="somenteNumeros"
@@ -33,7 +33,7 @@
               <v-row>
                 <v-text-field
                   :rules="regrasFormulario.quantidade"
-                  v-model="produtoEmEdicao.quantidadeNoEstoque"
+                  v-model="$store.state.produtoEmEdicao.quantidadeNoEstoque"
                   label="Quantidade"
                   @keypress="somenteNumeros"
                   @oninput="tamanhoDoCampo"
@@ -57,38 +57,20 @@
 
 <script>
 import utilitario from "../utilitarios";
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 export default {
   name: "ModalTabela",
-  props: {
-    produtoEmEdicao: {
-      default: {
-        nome: "Nenhum produto em edição",
-        preco: 1,
-        quantidadeNoEstoque: 0,
-      },
-    },
-    abrirModal: {
-      default: false,
-    },
-  },
-  watch: {
-    abrirModal(val) {
-      val || this.fechar();
-    },
-  },
   methods: {
     salvar() {
       const formularioEstaValido = this.$refs.form.validate();
 
       if (formularioEstaValido) {
-        this.atualizarProdutoAction(this.produtoEmEdicao);
+        this.atualizarProdutoAction(this.$store.state.produtoEmEdicao);
         this.fechar();
       }
     },
     fechar() {
-      this.$emit("fecharModal");
-      this.$emit("atualizeComponente");
+      this.setStatusModal(false);
     },
     somenteNumeros(event) {
       utilitario.permitirSomenteNumeros(event);
@@ -96,7 +78,8 @@ export default {
     tamanhoDoCampo() {
       return utilitario.atribuirTamanhoDoCampo();
     },
-    ...mapActions(["atualizarProdutoAction"]),
+    ...mapActions(['atualizarProdutoAction']),
+    ...mapMutations(['setStatusModal'])
   },
   data() {
     return {

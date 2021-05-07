@@ -14,12 +14,7 @@
         <v-toolbar-title>Produtos</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <ModalTabela
-          :produtoEmEdicao="produtoEmEdicao"
-          :abrirModal="dialog"
-          @fecharModal="fecharModal"
-          @atualizeComponente="forcarAtualizacao"
-        />
+        
       </v-toolbar>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
@@ -31,19 +26,14 @@
 
 <script>
 import utilitario from "../utilitarios";
-import { mapState, mapActions } from "vuex";
-import ModalTabela from "./ModalTabela";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
-  components: { ModalTabela },
+  components: {},
   computed: {
     ...mapState(["produtos"]),
-    produtoEmEdicao() {
-      return this.itemEditado;
-    },
   },
   data: () => ({
     regrasFormulario: utilitario.obtenhaRegrasDoFormularioDeProduto(),
-    dialog: false,
     headers: [
       {
         text: "Descrição",
@@ -63,29 +53,41 @@ export default {
     },
     renderizarNovamente: false,
   }),
+  beforeCreate() {
+    console.log('Componente: Tabela - beforeCreated')
+  },
   created() {
-    console.log("Tabela criada");
-    console.log(this.itemEditado);
+    console.log('Componente: Tabela - Created');
+  },
+  beforeMount() {
+    console.log('Componente: Tabela - beforeMount')
+  },
+  mounted() {
+    console.log('Componente: Tabela - mouted')
   },
   beforeUpdate() {
-    console.log("antes de atualizar");
+    console.log('Componente Tabela - beforeUpdated');
+  },
+  updated() {
+    console.log('Componente Tabela - updated');
+  },
+  beforeDestroy() {
+    console.log('Compoente Tabela - beforeDestroy')
+  },
+  destroyed() {
+    console.log('Componente Tabela - destroyed')
   },
   methods: {
     editarItem(item) {
-      this.itemEditado = Object.assign({}, item);
-      this.dialog = true;
+      this.setProdutoEmEdicao(item);
+      this.setStatusModal(true);
     },
 
     deletarItem(item) {
       this.removerProdutoAction(item.id);
     },
-    fecharModal() {
-      this.dialog = false;
-    },
-    forcarAtualizacao() {
-      this.$forceUpdate();
-    },
-    ...mapActions(["removerProdutoAction"]),
+    ...mapActions(['removerProdutoAction']),
+    ...mapMutations(['setProdutoEmEdicao', 'setStatusModal'])
   },
 };
 </script>

@@ -5,7 +5,14 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    produtos: []
+    produtos: [],
+    produtoEmEdicao: {
+      id: '',
+      nome: '',
+      preco: 0,
+      quantidadeNoEstoque: 1
+    },
+    statusModal: false
   },
   mutations: {
     adicionarProdutoMutation(state, novoProduto) {
@@ -20,6 +27,12 @@ export default new Vuex.Store({
       let itemAntigo = state.produtos.find(item => item.id === idProduto);
       let indiceDoItemAntigo = state.produtos.indexOf(itemAntigo);
       state.produtos.splice(indiceDoItemAntigo, 1);
+    },
+    setStatusModal(state, status) {
+      state.statusModal = status;
+    },
+    setProdutoEmEdicao(state, produtoEmEdicao) {
+      state.produtoEmEdicao = produtoEmEdicao;
     }
   },
   actions: {
