@@ -23,7 +23,7 @@
             <v-icon>mdi-database-sync</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Sincronizar</v-list-item-title>
+            <v-list-item-title>Playground</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

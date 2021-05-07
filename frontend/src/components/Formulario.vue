@@ -59,6 +59,8 @@
 </style>
 
 <script>
+import { mapActions } from 'vuex';
+import { uuid } from 'vue-uuid'
 export default {
   data: () => ({
     snackbar: {
@@ -88,7 +90,13 @@ export default {
       const formularioEstaValido = this.$refs.form.validate();
 
       if (formularioEstaValido) {
-        
+        let novoId = uuid.v1();
+        this.adicionarProdutoAction({
+          id: novoId,
+          nome: this.descricao,
+          preco: this.preco,
+          quantidadeNoEstoque: this.quantidade
+        });
         this.limpeCamposDoFormulario();
       }
     },
@@ -110,6 +118,7 @@ export default {
     limpeCamposDoFormulario() {
       this.$refs.form.reset();
     },
+    ...mapActions(['adicionarProdutoAction'])
   },
 };
 </script>
